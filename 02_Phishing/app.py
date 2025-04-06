@@ -1,12 +1,13 @@
 from flask import Flask, request, render_template, jsonify
 from flask_cors import CORS
-from pyngrok import ngrok, conf 
+from pyngrok import ngrok
 import json
 import os
 import datetime
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 CORS(app)
+
 
 # En lugar de una base de datos real, usaremos un archivo JSON local
 # para almacenar temporalmente los datos (solo con fines educativos)
@@ -97,9 +98,6 @@ def clear_data():
     return jsonify({'success': True})
 
 if __name__ == '__main__':
-    # Configurar ngrok para exponer el servidor Flask
-    public_url = ngrok.connect(5000)
-    print(f" * ngrok túnel expuesto en {public_url}")
     
     # Ejecutar la aplicación Flask
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='127.0.0.1', port=5000, debug=True)
